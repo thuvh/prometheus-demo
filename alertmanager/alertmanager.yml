@@ -1,0 +1,39 @@
+global:
+  resolve_timeout: 5m
+  # The smarthost and SMTP sender used for mail notifications.
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'aipi.root1@gmail.com'
+  smtp_auth_username: 'aipi.root1@gmail.com'
+  smtp_auth_password: 'fcwfzcfzvcivwust'
+  slack_api_url: https://hooks.slack.com/services/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
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'slack_general'
+
+receivers:
+- name: slack_general
+  slack_configs:
+    - channel: '#general'
+
+- name: slack_postgres
+  slack_configs:
+    - channel: '#postgres'
+
+- name: slack_servers
+  slack_configs:
+    - channel: '#postgres'
+
+- name: email_thuvh_ospg
+  email_configs:
+  - to: 'thuvh@osp.vn'
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
