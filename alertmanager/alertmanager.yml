@@ -13,6 +13,10 @@ route:
   group_interval: 10s
   repeat_interval: 1h
   receiver: 'slack_general'
+  routes:
+    - match:
+        severity: error
+      receiver: email_slack
 
 receivers:
 - name: slack_general
@@ -30,6 +34,12 @@ receivers:
 - name: email_thuvh_ospg
   email_configs:
   - to: 'thuvh@osp.vn'
+
+- name: email_slack
+  email_configs:
+  - to: 'thuvh@osp.vn'
+  slack_configs:
+    - channel: '#general'    
 
 inhibit_rules:
   - source_match:

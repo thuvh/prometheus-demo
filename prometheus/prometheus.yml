@@ -13,7 +13,7 @@ alerting:
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  # - "first_rules.yml"
+  - 'alerts/*.yml'
   # - "second_rules.yml"
 
 # A scrape configuration containing exactly one endpoint to scrape:
@@ -27,3 +27,41 @@ scrape_configs:
 
     static_configs:
     - targets: ['192.168.10.48:9090']
+
+  - job_name: 'svr88'
+    static_configs:
+    - targets: ['192.168.10.88:9100']
+      labels: 
+        type: server
+        name: svr88
+
+  - job_name: 'svr89'
+    static_configs:
+    - targets: ['192.168.10.89:9100']
+      labels: 
+        type: server
+        name: svr89
+
+  - job_name: 'redis_exporter_targets'
+    static_configs:
+    - targets:
+      - redis://192.168.10.88:6379
+      - redis://192.168.10.48:6379
+    metrics_path: /scrape
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.10.88:9121
+
+  - job_name: 'redis_exporter'
+    static_configs:
+    - targets: ['192.168.10.88:9121']
+
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - 192.168.10.48:8080
