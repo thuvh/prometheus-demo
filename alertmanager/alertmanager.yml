@@ -4,8 +4,8 @@ global:
   smtp_smarthost: 'smtp.gmail.com:587'
   smtp_from: 'aipi.root1@gmail.com'
   smtp_auth_username: 'aipi.root1@gmail.com'
-  smtp_auth_password: 'fcwfzcfzvcivwust'
-  slack_api_url: https://hooks.slack.com/services/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
+  smtp_auth_password: 'password'
+  slack_api_url: https://hooks.slack.com/services/Ttoken/BRtoken/token
 
 route:
   group_by: ['alertname']
